@@ -8,7 +8,7 @@ export default function WeatherInfo() {
   const { weatherData, forecastData, loading } = useWeatherContext();
   const theme = getWeatherTheme();
   const temperature = weatherData?.main.temp as number;
-  const icon = weatherData?.weather[0].icon as string;
+  const icon = weatherData?.weather[0].icon as string || '';
   const [tempMax, tempMin] = [
     forecastData?.list[0].main.temp_max,
     forecastData?.list[0].main.temp_min,

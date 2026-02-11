@@ -39,7 +39,7 @@ export const ContextWeatherProvider = ({
   useEffect(() => {
     getWeatherData();
     getForecastData();
-  }, []);
+  }, [city]);
 
   return (
     <WeatherContext.Provider value={{ weatherData, setCity, forecastData, loading }}>

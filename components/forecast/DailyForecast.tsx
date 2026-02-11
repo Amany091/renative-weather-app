@@ -3,11 +3,11 @@ import { ForecastListItem } from "@/types/forecast";
 import { getDay, roundTemp } from "@/utils/date";
 import getWeatherTheme from "@/utils/weatherTheme";
 import React, { useCallback } from "react";
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import RemoteImage from "../Image";
 import { getDailyForecast } from "./forecastHelper";
 
 export default function DailyForecast() {
-  const WEATHER_HOST = process.env.EXPO_PUBLIC_WEATHER_HOST_URL;
   const { forecastData, loading } = useWeatherContext();
   const data = getDailyForecast(
     forecastData?.timezone || 0,
@@ -20,12 +20,7 @@ export default function DailyForecast() {
     const day = getDay(item.dt, forecastData?.timezone || 0);
     return (
       <View style={[styles.forecastItem, { backgroundColor: theme.card }]}>
-        {icon && (
-          <Image
-            source={{ uri: `${WEATHER_HOST}/img/wn/${icon}@2x.png` }}
-            style={{ width: 50, height: 50 }}
-          />
-        )}
+        <RemoteImage icon={icon} style={{ width: 50, height: 50 }} />
         <Text style={{ color: theme.textPrimary }}>{day}</Text>
         <Text style={{ color: theme.textSecondary }}>
           {roundTemp(item.main.temp_max)}°
@@ -44,7 +39,6 @@ export default function DailyForecast() {
 
   return (
     <View>
-      {/* <Text style={{color: theme.textPrimary, marginVertical: 10, fontSize: 25}}>Daily Forecast</Text> */}
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}

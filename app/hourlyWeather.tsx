@@ -7,6 +7,7 @@ import React from 'react'
 import { FlatList, Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { realTimeFormat } from '@/utils/date'
+import { useRouter } from 'expo-router'
 
 const theme = getWeatherTheme()
 
@@ -30,11 +31,11 @@ function Card({obj}: {obj: CardProp}) {
       >
         <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5}}>
           <Ionicons name={obj.icon} size={20} color={theme.textSecondary} />
-          <Text style={{ fontSize: 16, fontWeight: "bold", color: theme.textSecondary }}> 
+          <Text style={{ fontSize: 16, fontWeight: "bold", color: theme.textPrimary }}> 
             {obj.title}
           </Text>
         </View>
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{obj.value}</Text>
+        <Text style={{fontSize: 20, fontWeight: 'bold', color: theme.textSecondary}}>{obj.value}</Text>
       </View>
   );
 }
@@ -43,6 +44,7 @@ export default function HourlyWeather() {
   const {forecastData} = useWeatherContext()
   const data = getHourlyForecast(forecastData?.timezone || 0, forecastData?.list || [])
   const {hour12, period, formattedMins} = realTimeFormat(new Date())
+  const router = useRouter()
 
   const RenderItem = ({item}: {item: ForecastListItem})=>{
     return (
@@ -61,10 +63,12 @@ export default function HourlyWeather() {
   }
 
   return (
-    <View style={{marginHorizontal: 10}}>
-      <Text style={{fontSize: 20, fontWeight: 'bold', marginVertical: 10}}>Hourly Weather</Text>
+    <View style={{paddingHorizontal: 20, backgroundColor: '#000000', flex: 1}}>
+      <View style={{flexDirection: 'row', columnGap: 10, alignItems: 'center'}}>
+        <Ionicons name='arrow-back' size={20} onPress={()=> router.push('/')} color= {theme.textPrimary} />
+        <Text style={{fontSize: 20, fontWeight: 'bold', marginVertical: 10, color: theme.textPrimary}}>Hourly Weather</Text>
+      </View>
       <Text style={{color: theme.textSecondary}} > {forecastData?.city.name}, {forecastData?.city.country} {hour12}:{formattedMins} {period}</Text>
-      <Text style={{color: theme.textSecondary}}></Text>
       <FlatList 
         data={data}
         keyExtractor={(item)=> item.dt.toString()}

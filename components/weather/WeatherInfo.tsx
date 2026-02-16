@@ -3,38 +3,41 @@ import getWeatherTheme from "@/utils/weatherTheme";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import RemoteImage from "../Image";
+import { roundTemp } from "@/utils/date";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 
 export default function WeatherInfo() {
-  const { weatherData, forecastData, loading } = useWeatherContext();
+  const { weatherData, loading } = useWeatherContext();
   const theme = getWeatherTheme();
   const temperature = weatherData?.main.temp as number;
   const icon = weatherData?.weather[0].icon as string || '';
-  const [tempMax, tempMin] = [
-    forecastData?.list[0].main.temp_max,
-    forecastData?.list[0].main.temp_min,
-  ];
 
   if (loading) return <Text style={{ fontSize: 25 }}> loading... </Text>;
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <RemoteImage icon={icon} style={{ width: 100, height: 100 }} />
-        <Text style={[styles.temperatureText, { color: theme.textPrimary }]}>
-          {" "}
-          {Math.floor(temperature)}°{" "}
-        </Text>
-      </View>
-      <View>
-        <Text style={{ color: theme.textSecondary }}>
+      <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
+        <Text style={{ color: theme.textPrimary, fontSize: 28 }}>
           {weatherData?.weather[0]?.description}
         </Text>
-        <Text style={{ color: theme.textSecondary }}>
-          {Math.round(tempMax as number)}°/ {Math.round(tempMin as number)}°
-        </Text>
-        <Text style={{ color: theme.textSecondary }}>
-          Feels like {Math.round(weatherData?.main.feels_like as number)}°
-        </Text>
+        <RemoteImage icon={icon} style={{ width: 50, height: 50 }} />
+      </View>
+      <Text style={[styles.temperatureText, { color: theme.textPrimary }]}>
+        {roundTemp(temperature)}°C
+      </Text>
+      <View style={styles.weatherInfoContainer}>
+        <View style={styles.centeralizedText}>
+          <Feather name="wind" size={20} />
+          <Text style={{ color: theme.textSecondary }}> {weatherData?.wind.speed} m/s</Text>
+        </View>
+        <View style={styles.centeralizedText} >
+          <MaterialIcons name="water-drop" size={20} />
+          <Text style={{ color: theme.textSecondary }}> {weatherData?.main.humidity}% </Text>
+        </View>
+        <View style={styles.centeralizedText}>
+          <MaterialIcons name='umbrella' size={20} />
+          <Text style={{ color: theme.textSecondary }}> {weatherData?.main.feels_like} </Text>
+        </View>
       </View>
     </View>
   );
@@ -42,8 +45,6 @@ export default function WeatherInfo() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   temperatureText: {
@@ -53,4 +54,13 @@ const styles = StyleSheet.create({
   image: {
     color: "#fff",
   },
+  weatherInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 20
+  },
+  centeralizedText: {
+    alignItems: 'center'
+  }
 });

@@ -10,6 +10,7 @@ import {
     View,
 } from "react-native";
 import RemoteImage from "./Image";
+import getWeatherTheme from "@/utils/weatherTheme";
 
 export default function Accordion({
   children,
@@ -21,6 +22,7 @@ export default function Accordion({
   timezone: number;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const theme = getWeatherTheme()
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
@@ -31,15 +33,15 @@ export default function Accordion({
     <View style={styles.accContainer}>
       <Pressable onPress={toggleExpand}>
         <View style={styles.flexContainer}>
-          <Text>
+          <Text style={{color: theme.textSecondary}}>
             {getHour(item.dt, timezone)} {getPeriod(item.dt, timezone)}
           </Text>
           <RemoteImage
             icon={item?.weather[0].icon}
             style={{ width: 30, height: 30 }}
           />
-          <Text> {item.main.temp}° </Text>
-          <Text> 💧{item.main.humidity}% </Text>
+          <Text style={{color: theme.textSecondary}}> {item.main.temp}° </Text>
+          <Text style={{color: theme.textSecondary}}> 💧{item.main.humidity}% </Text>
           <Ionicons
             name={expanded ? "chevron-up" : "chevron-down"}
             size={24}

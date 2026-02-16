@@ -1,4 +1,4 @@
-import { WeatherContext } from "@/context/weatherContext";
+import { WeatherContext } from "@/providers/weatherContext";
 import { use } from "react";
 
 const useWeatherContext = () => {

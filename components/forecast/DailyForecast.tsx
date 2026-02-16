@@ -19,7 +19,7 @@ export default function DailyForecast() {
     const icon = item.weather[0].icon;
     const day = getDay(item.dt, forecastData?.timezone || 0);
     return (
-      <View style={[styles.forecastItem, { backgroundColor: theme.card }]}>
+      <View style={[styles.forecastItem]}>
         <RemoteImage icon={icon} style={{ width: 50, height: 50 }} />
         <Text style={{ color: theme.textPrimary }}>{day}</Text>
         <Text style={{ color: theme.textSecondary }}>
@@ -38,7 +38,7 @@ export default function DailyForecast() {
     );
 
   return (
-    <View>
+    <View style={{ marginVertical: 20, marginHorizontal: 10 }}>
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -63,5 +63,6 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     borderRadius: 50,
+    // height: 200,
   },
 });

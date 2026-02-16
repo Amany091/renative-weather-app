@@ -2,8 +2,10 @@ import useWeatherContext from "@/hooks/useWeatherContext";
 import { ForecastListItem } from "@/types/forecast";
 import { getHour, realTimeFormat, roundTemp } from "@/utils/date";
 import getWeatherTheme from "@/utils/weatherTheme";
+import { useRouter } from "expo-router";
 import React, { useCallback } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import Button from "../Button";
 import RemoteImage from "../Image";
 import { getHourlyForecast } from "./forecastHelper";
 
@@ -15,6 +17,7 @@ export default function HourlyForecast() {
   );
   const period = realTimeFormat(new Date()).period;
   const theme = getWeatherTheme();
+  const router = useRouter();
 
   const RenderItem = useCallback(({ item }: { item: ForecastListItem }) => {
     const hour = getHour(item.dt, forecastData?.timezone || 0);
@@ -36,20 +39,23 @@ export default function HourlyForecast() {
   }, []);
 
   return (
-    <View style={{ marginBottom: 20 }}>
-      {/* <Text style={{color: theme.textPrimary, marginVertical: 10, fontSize: 25}}>Hourly Forecast</Text> */}
+    <View style={{ marginVertical: 20, marginHorizontal: 10 }}>
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
         data={data}
         renderItem={({ item }) => <RenderItem item={item} />}
         keyExtractor={(item, index) => String(index)}
-        // ItemSeparatorComponent={()=> <View style={{width: 10}} />}
+        ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
         ListEmptyComponent={() => (
           <Text style={{ color: theme.textPrimary }}>
             Obs! No data available!
           </Text>
         )}
+      />
+      <Button
+        title={"More"}
+        onPress={() => router.push("/hourlyWeather")}
       />
     </View>
   );
@@ -60,5 +66,5 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     borderRadius: 50,
-  },
+  }
 });
